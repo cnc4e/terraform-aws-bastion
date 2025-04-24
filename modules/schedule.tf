@@ -1,4 +1,4 @@
-# 開始
+# Start
 resource "aws_scheduler_schedule" "bastion_start" {
   name                         = "${var.resouce_name}-bastion-schedule-start"
   schedule_expression          = var.start_time
@@ -18,7 +18,7 @@ resource "aws_scheduler_schedule" "bastion_start" {
   }
 }
 
-# 停止
+# Stop
 resource "aws_scheduler_schedule" "bastion_stop" {
   name                         = "${var.resouce_name}-bastion-schedule-stop"
   schedule_expression          = var.stop_time

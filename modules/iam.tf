@@ -1,4 +1,4 @@
-# SSM セッションマネージャー
+# Session Manager
 
 resource "aws_iam_role" "session_manager" {
   name               = "${var.resouce_name}-session-manager"
@@ -19,7 +19,7 @@ resource "aws_iam_instance_profile" "session_manager" {
   role = aws_iam_role.session_manager.name
 }
 
-# 踏み台サーバーのスケジュール
+# Schedule for bastion server
 
 resource "aws_iam_role" "ec2_schedule" {
   name               = "${var.resouce_name}-bastion-schedule"

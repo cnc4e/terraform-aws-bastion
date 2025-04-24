@@ -14,7 +14,7 @@ variable "start_time" {
 }
 
 variable "stop_time" {
-  description = "Time to shut down the bastion server"
+  description = "Time to stop the bastion server"
   type        = string
 }
 
