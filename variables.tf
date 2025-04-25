@@ -1,37 +1,37 @@
 variable "resouce_name" {
-  description = "Name for each resource"
+  description = "各種リソースに付ける共通の名前"
   type        = string
 }
 
 variable "instance_type" {
-  description = "Requested instance type"
+  description = "踏み台サーバーで使うインスタンスタイプ"
   type        = string
   default     = "t2.medium"
 }
 
 variable "start_time" {
-  description = "Time to start up the bastion server"
+  description = "踏み台サーバーを起動する時間"
   type        = string
   default     = "cron(55 8 * * ? *)"
 }
 
 variable "stop_time" {
-  description = "Time to shut down the bastion server"
+  description = "踏み台サーバーを停止する時間"
   type        = string
   default     = "cron(0 19 * * ? *)"
 }
 
 variable "timezone" {
-  description = "Time zone in which the user is located"
+  description = "踏み台サーバーを起動・停止する時間のタイムゾーン"
   type        = string
 }
 
 variable "vpc_id" {
-  description = "VPC ID where the bastion server is located"
+  description = "踏み台サーバーを配置するVPCのID"
   type        = string
 }
 
 variable "subnet_id" {
-  description = "Subnet ID where the bastion server is located"
+  description = "踏み台サーバーを配置するサブネットのID"
   type        = string
 }
