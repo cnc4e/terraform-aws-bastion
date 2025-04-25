@@ -1,5 +1,5 @@
 module "bastion" {
-  source = "./modules"
+  source = "./modules/bastion"
 
   resouce_name  = var.resouce_name
   instance_type = var.instance_type
