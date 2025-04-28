@@ -1,4 +1,4 @@
 output "bastion" {
-  description = "Bastion module output"
+  description = "Bastion module"
   value       = module.bastion
 }
