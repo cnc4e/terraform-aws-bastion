@@ -1,5 +1,5 @@
 ## Usages
-実行手順は[このドキュメント](./docs/usage.md)を参考にしてください。
+実行手順は[このドキュメント](https://github.com/cnc4e/terraform-aws-bastion/blob/main/docs/usage.md)を参考にしてください。
 
 ## Requirements
 
