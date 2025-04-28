@@ -1,3 +1,6 @@
+## Usages
+実行手順は[このドキュメント](./docs/usage.md)を参考にしてください。
+
 ## Requirements
 
 | Name | Version |
