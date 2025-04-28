@@ -1,11 +1,17 @@
 ## 実行手順
-AWSのCloudShellを起動し、以下のコマンドを入力してTerraformをインストールしてください。このときリージョンがリソースを作りたい場所に指定されていることを確認してください。
+### CloudShell起動
+AWSマネージドコンソールに入り、画面下の`CloudShell`よりをCloudShell起動してください。このときリージョンがリソースを作りたい場所に指定されていることを確認してください。
+
+### Terraformインストール
+以下のコマンドを入力してTerraformをインストールしてください。
 ```
 sudo yum install -y yum-utils shadow-utils
 sudo yum-config-manager --add-repo https://rpm.releases.hashicorp.com/AmazonLinux/hashicorp.repo
 sudo yum -y install terraform
 ```
 `terraform version`を実行し、バージョンが表示されることを確認してください。
+
+### 踏み台サーバー作成
 
 次に、以下のコマンドを実行してください。なお、後ろにコメントアウトで説明がある変数は自分で設定する必要があります。コメントの内容に従ってください。
 ```
