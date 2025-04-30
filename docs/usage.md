@@ -13,9 +13,9 @@ sudo yum -y install terraform
 
 ### 踏み台サーバー作成
 
-次に、以下のコマンドを実行してください。なお、後ろにコメントアウトで説明がある変数は自分で設定する必要があります。コメントの内容に従ってください。
+次に、以下のコマンドを実行してください。なお、後ろにコメントアウトで説明がある変数は自分で設定する必要があります。コメントの内容に従ってください。また、tfファイルの`set.tf`のファイル名は任意です。
 ```
-cat <<EOF > set.tf #このtfファイルの名前は任意です。以降はset.tfとします。
+cat <<EOF > set.tf
 module "bastion" {
   source       = "cnc4e/bastion/aws"
   version      = "0.1.0" #使うバージョンの指定。基本的にはlatestとなっているバージョンを記述してください。
@@ -35,14 +35,14 @@ terraform init
 terraform plan #ここで、作成されるリソースが正しいか確認してください。
 terraform apply #リソースを作成していいかの確認があるので、その時にyesと入力してください。
 ```
-最後に、`Apply complete`と表示されたら完了です。
+最後に、`Apply complete`と表示されたら完了です。  
+ここで、CloudShellは終了しないでください。
 
 ### CloudShellからtfstateをダウンロードする
 CloudShellのボリュームは一時的なものを使っています。  
 そのため、CloudShellでリソースを作成した場合、そのtfstateファイルが消えてしまい`terraform destroy`でリソース削除ができなくなってしまいます。  
 以下は、CloudShellからファイルをダウンロードする方法を記述します。
 
-CloudShellを起動します。  
 以下コマンドを実行し、tfstateがあるディレクトリまでのパスと、tfstateとtfファイル名を確認してください。
 ```
 pwd
@@ -61,5 +61,6 @@ CloudShellを起動します。
 右上の"アクション"より"ファイルのアップロード"を選択し、手順"CloudShellからtfstateをダウンロードする"でダウンロードしたファイルをアップロードしてください。  
 その後、以下コマンドで踏み台サーバーを削除してください。
 ```
+terraform init
 terraform destroy
 ```
