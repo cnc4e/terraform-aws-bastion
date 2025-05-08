@@ -1,6 +1,6 @@
 ## 実行手順
 ### CloudShell起動
-AWSマネージドコンソールに入り、画面下の`CloudShell`よりをCloudShell起動してください。このときリージョンがリソースを作りたい場所に指定されていることを確認してください。
+AWSマネージドコンソールにログインし、画面下の`CloudShell`よりCloudShell起動してください。このときリージョンがリソースを作りたい場所に指定されていることを確認してください。
 
 ### Terraformインストール
 以下のコマンドを入力してTerraformをインストールしてください。
@@ -9,11 +9,13 @@ sudo yum install -y yum-utils shadow-utils
 sudo yum-config-manager --add-repo https://rpm.releases.hashicorp.com/AmazonLinux/hashicorp.repo
 sudo yum -y install terraform
 ```
-`terraform version`を実行し、バージョンが表示されることを確認してください。
+インストール後に`terraform version`コマンドを実行し、バージョンが表示されることを確認してください。
 
 ### 踏み台サーバー作成
 
-1. 以下のコマンドを実行してください。なお、後ろにコメントアウトで説明がある変数は自分で設定する必要があります。コメントの内容に従ってください。また、tfファイルの`set.tf`のファイル名は任意です。
+1. 以下のコマンドを実行してください。  
+なお、後ろにコメントアウトで説明がある変数は自分で設定する必要があります。コメントの内容に従ってください。  
+また、tfファイルの`set.tf`のファイル名は任意です。
 ```
 cat <<EOF > set.tf
 module "bastion" {
@@ -40,7 +42,7 @@ terraform apply #リソースを作成していいかの確認があるので、
 
 ### CloudShellからtfstateをダウンロードする
 CloudShellのボリュームは一時的なものを使っています。  
-そのため、CloudShellでリソースを作成した場合、そのtfstateファイルが消えてしまい`terraform destroy`でリソース削除ができなくなってしまいます。  
+そのため、CloudShellでリソースを作成した場合、tfstateファイルが消えてしまい`terraform destroy`でリソース削除ができなくなってしまいます。  
 以下は、CloudShellからファイルをダウンロードする方法を記述します。
 
 1. 以下コマンドを実行し、tfstateがあるディレクトリまでのパスと、tfstateとtfファイル名を確認してください。
@@ -52,7 +54,7 @@ ls
 2. 右上の"アクション"より"ファイルのダウンロード"を選択します。  
 そこに書かれている通り、ダウンロードするtfstateとtfファイルまでのパスを入力し、ローカル端末にダウンロードします。  
 
-このファイルは踏み台サーバーを削除するために使うため、任意の場所に保管してください。
+このファイルは踏み台サーバーを削除するために使うため、**任意の場所に保管してください**。
 
 ## VSCodeでセッションマネージャーを使う手順
 ### aws cliのインストール
@@ -61,24 +63,26 @@ VSCodeでセッションマネージャーを使うには、`aws cli`コマン�
 
 ### aws configureの設定
 aws cliをインストールしただけではアカウントへアクセスすることはできず、aws configureを設定する必要があります。**ローカル端末に**aws configureを設定してください。以下は設定の手順です。
-1. AWSコンソールに入り、"IAM > ユーザー > {使うIAMユーザー}"に移動します。  
+1. AWSコンソールにログインし、"IAM > ユーザー > {使うIAMユーザー}"に移動します。  
 2. "許可"欄の"許可ポリシー"より、使うIAMユーザーに"AmazonSSMFullAccess"と"EC2インスタンスへのアクセス権限"のポリシーが付与されていることを確認してください。
 3. "セキュリティ認証情報"欄の"アクセスキー"を選択します。
 4. ユースケースに"コマンドラインインターフェイス (CLI)"を選択し、アクセスキーを作成し、これを保存します。このとき、アクセスキーとシークレットキーの2つが作成されますが、このうち**シークレットキーは作成したタイミングでしか表示されないことに注意してください**。
-5. **ローカル端末**で`aws configure`コマンドを実行し、以下のように入力してください。  
+5. **ローカル端末に戻り**`aws configure`コマンドを実行し、以下のように入力してください。  
 なお、この時同時にAWSプロファイルが設定されます。このプロファイル名を指定する時は`aws configure --profile {プロファイル名}`で設定してください。何も指定しないときは`default`という名前でプロファイルが作成されます。
 ```
+C:\Users\USERNAME> aws configure
 AWS Access Key ID [None]: AKIAAAAAAAAAAAAAAMPLE #先ほど作成したアクセスキー
 AWS Secret Access Key [None]: wJalrXUtnFEMAAAAAAAAAAAAAKEY #先ほど作成したシークレットキー
-Default region name [None]: us-west-2 #このプロファイルでアクセスするリージョンのデフォルト設定
+Default region name [None]: ap-northeast-1 #このプロファイルでアクセスするリージョンのデフォルト設定
 Default output format [None]: json #CLIコマンドが返す出力のデフォルト形式
 ```
 6. `aws ec2 describe-instances`コマンドを実行し、EC2の一覧が表示されることを確認してください。
 
 ### SessionManagerPluginのインストール
 SessionManagerPluginをインストールすることで、ローカル端末からセッションマネージャーの開始と終了の操作が行えるようになります。[SessionManagerPluginに関するAWS公式ドキュメント](https://docs.aws.amazon.com/ja_jp/systems-manager/latest/userguide/install-plugin-windows.html)に従って**ローカル端末に**SessionManagerPluginをインストールしてください。  
-ドキュメントにも書かれていますが、インストール後に`session-manager-plugin`コマンドを実行し、以下の文章が返ってくることを確認してください。
+ドキュメントにも書かれていますが、インストール後に`session-manager-plugin`コマンドを実行し、以下のようにインストールに成功している旨の文章が返ってくることを確認してください。
 ```
+C:\Users\USERNANE> session-manager-plugin
 The Session Manager plugin is installed successfully. Use the AWS CLI to start a session.
 ```
 
@@ -94,11 +98,21 @@ The Session Manager plugin is installed successfully. Use the AWS CLI to start a
   1. VSCodeを開き、左下の歯車マークの"管理"より"設定"を選択してください。
   2. "アプリケーション > プロキシ"に移動します。
   3. "プロキシ"欄の"Http: Proxy"に端末に設定しているプロキシを入力して保存してください。
+- プロキシ環境下でVSCodeからアクセスした際、端末およびVSCodeにプロキシを設定しているにも関わらず接続できないことがあります。  
+この場合、aws cliがプロキシの独自証明書を認識していない可能性があります。対応として、aws cliのconfigファイルに証明書を直接認識させてください。以下はその手順です。  
+  1. 任意の場所にプロキシの証明書を配置します。証明書が複数個ある場合は、新しく`.crt`ファイルを1つ作り、そこに証明書の中身を全てコピペしてください。
+  2. aws cliのconfigファイルを開き、以下のように使うプロファイルに`ca_bundle`変数に証明書までのパスを入力し、保存してください。  
+  なお、aws cliのconfigファイルは、デフォルトでは`C:\Users\{your_username}\.aws\config`に配置されます。
+```
+[profile test]
+region = ap-northeast-1
+output = json
+ca_bundle = C:\Users\{your_username}\.ssh\test.crt
+```
 
 ### SSHキーの作成・EC2への登録
 1. **ローカル端末で**コマンドプロンプトを開き、`ssh-keygen -t rsa -b 2048 -f {.sshまでのパス}\{公開鍵・秘密鍵の名前}`を入力し、両キーを作成します。以下は出力例です。  
-なお、ここの`Enter passphrase`ではパスフレーズを設定できます。  
-これを設定することで、キーを使う際にパスフレーズの入力が必要となり、キー流出に対するセキュリティリスクを解消できます。  
+なお、ここの`Enter passphrase`ではパスフレーズを設定できます。これを設定することで、キーを使う際にパスフレーズの入力が必要となり、キー流出に対するセキュリティリスクを解消できます。  
 ここで空白のままEnterキーを押すことで、パスフレーズを設定しないこともできます。  
 `Enter same passphrase again`ではパスフレーズを再入力するものですので、パスフレーズを設定した時は再入力し、設定していない時は空白のままEnterキーを押してください。
 ```
