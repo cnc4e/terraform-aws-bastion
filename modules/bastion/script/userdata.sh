@@ -27,4 +27,20 @@ curl -LO https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable
 install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
 yum install -y docker
 systemctl start docker
+wget https://dl.google.com/go/go1.24.3.linux-amd64.tar.gz
+tar -C /usr/local -xzf go1.24.3.linux-amd64.tar.gz
+rm go1.24.3.linux-amd64.tar.gz
+tee /etc/profile.d/golang_path.sh > /dev/null <<'EOF'
+#!/bin/bash 
+export PATH=$PATH:/usr/local/go/bin
+EOF
+chmod +x /etc/profile.d/golang_path.sh
+curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
+chmod 700 get_helm.sh
+./get_helm.sh
+rm get_helm.sh
+curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh -s -- -b /usr/local/bin
+yum install tree -y
+yum install nmap-ncat -y
+yum install ansible -y
 --//--
