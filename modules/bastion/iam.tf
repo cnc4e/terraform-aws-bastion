@@ -35,3 +35,35 @@ resource "aws_iam_role_policy_attachment" "ec2_schedule" {
   role       = aws_iam_role.ec2_schedule.name
   policy_arn = aws_iam_policy.ec2_schedule.arn
 }
+
+# backup
+resource "aws_iam_role" "backup" {
+  name               = "${var.resouce_name}-bastion-backup"
+  assume_role_policy = file("${path.module}/policy/backup_assum_role_policy.json")
+}
+
+resource "aws_iam_role_policy_attachment" "backup_backup" {
+  role       = aws_iam_role.backup.name
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AWSBackupServiceRolePolicyForBackup"
+}
+
+resource "aws_iam_role_policy_attachment" "backup_restore" {
+  role       = aws_iam_role.backup.name
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AWSBackupServiceRolePolicyForRestores"
+}
+
+resource "aws_iam_policy" "backup" {
+  name   = "${var.resouce_name}-backup-policy"
+
+  policy = templatefile(
+    "${path.module}/policy/backup_policy.json",
+    {
+      bastion_instance_iam = aws_iam_role.session_manager.arn
+    }
+  )
+}
+
+resource "aws_iam_role_policy_attachment" "backup_role" {
+  role       = aws_iam_role.backup.name
+  policy_arn = aws_iam_policy.backup.arn
+}
