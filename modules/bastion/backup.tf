@@ -7,7 +7,7 @@ resource "aws_backup_plan" "this" {
     schedule          = "cron(0 15 ? * MON-FRI *)"
 
     lifecycle {
-      delete_after = 10
+      delete_after = var.generation
     }
   }
 }

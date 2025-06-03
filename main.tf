@@ -8,4 +8,5 @@ module "bastion" {
   timezone      = var.timezone
   vpc_id        = var.vpc_id
   subnet_id     = var.subnet_id
+  generation    = var.generation
 }
