@@ -12,11 +12,11 @@
 
 1. 踏み台サーバー作成時に保管したtfstateファイルをCloudShellにアップロードする。
 2. `terraform state rm module.bastion.module.bastion.aws_instance.this`を実行する。
-3. `module.bastion.module.bastion.aws_instance.this {再作成されたインスタンスID}`を実行する。
+3. `terraform import module.bastion.module.bastion.aws_instance.this {リストアしたインスタンスID}`を実行する。
 4. 以下のコマンドを実行してください
 ```
 terraform init
 terraform plan
 terraform apply
 ```
-5. **ローカル端末に戻り**`{.sshまでのパス}/config`に設定した`Host`の`HostName`を、再作成されたインスタンスIDに変更する・
+5. **ローカル端末に戻り**`{.sshまでのパス}/config`に設定した`Host`の`HostName`を、リストアしたインスタンスIDに変更する・
