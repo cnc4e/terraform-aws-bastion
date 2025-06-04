@@ -39,3 +39,14 @@ No resources.
 | Name | Description |
 |------|-------------|
 | <a name="output_bastion"></a> [bastion](#output\_bastion) | Bastion module |
+
+## 機能説明
+
+### バックアップについて
+踏み台サーバーのバックアップ方法としてAWS Backupを使っています。
+バックアップは平日の0時に自動実行されます。
+世代数はデフォルトでは10ですが、`generation`変数を指定することで変更が可能です。
+バックアップよりサーバーをリストアした場合、そのバックアップ時のインスタンスが新規で作られます。
+そのため、**インスタンスをリストアした後に、そのリソースをtfstateファイルに認識させる必要がある**ことに注意してください。
+
+AWS Backupからサーバーをリストアする手順は[このドキュメント](https://github.com/cnc4e/terraform-aws-bastion/blob/main/docs/backup.md)を参考にしてください。

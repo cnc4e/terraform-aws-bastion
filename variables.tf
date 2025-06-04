@@ -35,3 +35,9 @@ variable "subnet_id" {
   description = "踏み台サーバーを配置するサブネットのID"
   type        = string
 }
+
+variable "generation" {
+  description = "バックアップの世代数"
+  type        = number
+  default     = 10
+}
