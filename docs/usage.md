@@ -22,10 +22,9 @@ module "bastion" {
   source       = "cnc4e/bastion/aws"
   version      = "0.1.0" #使うバージョンの指定。基本的にはlatestとなっているバージョンを記述してください。
 
-  # insert the 4 required variables here(defaultで決めていない変数は以下のように自分で記述しないとエラーになります)
+  # insert the 3 required variables here(defaultで決めていない変数は以下のように自分で記述しないとエラーになります)
   resouce_name = "sample" #各種リソースに付ける名前
   subnet_id    = "subnet-aaa" #サーバーを配置するサブネットのID。
-  timezone     = "Asia/Tokyo" #サーバーを自動停止・開始する時刻のタイムゾーン。
   vpc_id       = "vpc-aaa" #サーバーを配置するVPCのID。
 }
 EOF
