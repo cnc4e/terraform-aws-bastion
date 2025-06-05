@@ -12,18 +12,19 @@ variable "instance_type" {
 variable "start_time" {
   description = "踏み台サーバーを起動する時間"
   type        = string
-  default     = "cron(55 8 * * ? *)"
+  default     = "cron(55 8 ? * MON-FRI *)"
 }
 
 variable "stop_time" {
   description = "踏み台サーバーを停止する時間"
   type        = string
-  default     = "cron(0 19 * * ? *)"
+  default     = "cron(0 19 ? * MON-FRI *)"
 }
 
 variable "timezone" {
   description = "踏み台サーバーを起動・停止する時間のタイムゾーン"
   type        = string
+  default     = "Asia/Tokyo"
 }
 
 variable "vpc_id" {
