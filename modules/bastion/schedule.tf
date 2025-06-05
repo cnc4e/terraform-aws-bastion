@@ -23,6 +23,7 @@ resource "aws_scheduler_schedule" "bastion_start" {
 # Stop
 resource "aws_scheduler_schedule" "bastion_stop" {
   count = can(regex("cron", var.stop_time)) ? 1 : 0
+  
   name                         = "${var.resouce_name}-bastion-schedule-stop"
   schedule_expression          = var.stop_time
   schedule_expression_timezone = var.timezone
