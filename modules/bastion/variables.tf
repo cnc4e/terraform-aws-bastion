@@ -1,3 +1,19 @@
+variable "vpc_cidr" {
+  description = "VPCのCIDRブロック"
+  type        = string
+}
+
+variable "subnet_cidr" {
+  description = "サブネットのCIDRブロック"
+  type        = string
+}
+
+variable "region" {
+  description = "VPCのリージョン"
+  type        = string
+  default     = "ap-northeast-1"
+}
+
 variable "resouce_name" {
   description = "各種リソースに付ける共通の名前"
   type        = string
@@ -26,11 +42,19 @@ variable "timezone" {
 variable "vpc_id" {
   description = "踏み台サーバーを配置するVPCのID"
   type        = string
+  default     = ""
 }
 
 variable "subnet_id" {
   description = "踏み台サーバーを配置するサブネットのID"
   type        = string
+  default     = ""
+}
+
+variable "availability_zone" {
+  description = "アベイラビリティゾーン"
+  type        = string
+  default     = "ap-northeast-3a"
 }
 
 variable "generation" {

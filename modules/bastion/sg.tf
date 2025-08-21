@@ -1,5 +1,5 @@
 resource "aws_security_group" "ec2" {
-  vpc_id = var.vpc_id
+  vpc_id = var.vpc_id != "" ? var.vpc_id : aws_vpc.this[0].id
 
   egress {
     from_port   = 0
