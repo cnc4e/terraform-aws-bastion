@@ -54,7 +54,7 @@ variable "subnet_id" {
 variable "availability_zone" {
   description = "アベイラビリティゾーン"
   type        = string
-  default     = "ap-northeast-3a"
+  default     = "ap-northeast-1a"
 }
 
 variable "generation" {
