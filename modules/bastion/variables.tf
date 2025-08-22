@@ -61,3 +61,9 @@ variable "generation" {
   description = "バックアップの世代数"
   type        = number
 }
+
+variable "assign_eip" {
+  description = "EC2にEIPを割り当てるかどうか"
+  type        = bool
+  default     = false
+}
