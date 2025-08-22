@@ -13,7 +13,7 @@ variable "subnet_cidr" {
 variable "region" {
   description = "VPCのリージョン"
   type        = string
-  default     = "ap-northeast-3"
+  default     = "ap-northeast-1"
 }
 
 variable "resouce_name" {
