@@ -57,6 +57,12 @@ variable "subnet_id" {
   default     = ""
 }
 
+variable "availability_zone" {
+  description = "アベイラビリティゾーン"
+  type        = string
+  default     = "ap-northeast-1a"
+}
+
 variable "generation" {
   description = "バックアップの世代数"
   type        = number
