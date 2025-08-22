@@ -28,3 +28,11 @@ resource "aws_instance" "this" {
     Name = var.resouce_name
   }
 }
+
+resource "aws_eip" "this" {
+  count    = var.assign_eip ? 1 : 0
+  instance = aws_instance.this.id
+  tags = {
+    Name = "${var.resouce_name}-eip"
+  }
+}

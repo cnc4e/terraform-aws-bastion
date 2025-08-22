@@ -57,8 +57,20 @@ variable "subnet_id" {
   default     = ""
 }
 
+variable "availability_zone" {
+  description = "アベイラビリティゾーン"
+  type        = string
+  default     = "ap-northeast-1a"
+}
+
 variable "generation" {
   description = "バックアップの世代数"
   type        = number
   default     = 10
+}
+
+variable "assign_eip" {
+  description = "EC2にEIPを割り当てるかどうか"
+  type        = bool
+  default     = false
 }
