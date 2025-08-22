@@ -53,7 +53,7 @@ resource "aws_iam_role_policy_attachment" "backup_restore" {
 }
 
 resource "aws_iam_policy" "backup" {
-  name   = "${var.resouce_name}-backup-policy"
+  name = "${var.resouce_name}-backup-policy"
 
   policy = templatefile(
     "${path.module}/policy/backup_policy.json",
