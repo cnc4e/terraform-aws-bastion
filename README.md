@@ -77,3 +77,23 @@ $ aws s3 cp /home/ssm-user/terraform-aws-bastion/test/backup.md s3://kato-test/t
 upload: test/backup.md to s3://kato-test/test/backup.md      
 ```
 4. AWSマネジメントコンソールよりコピー先のS3バケットまで移動し、ダウンロードしたいファイルにチェックを入れ、画面上の"ダウンロード"を押下します。
+
+### EBSボリュームを拡張する方法
+EC2インスタンスのEBSボリューム容量が足りなくなった場合、後から拡張することができます。
+1. modules/bastion/ec2.tfを開き、root_block_deviceのvolume_sizeを希望のサイズに変更します。 
+```
+root_block_device {
+    volume_size           = 60
+    delete_on_termination = true
+    tags = {
+      Name = "${var.resouce_name}-ebs"
+    }
+  }
+```
+
+2. terraform planコマンドを実行し、以下の変更内容を表示されることを確認します。
+```
+Plan: 0 to add, 1 to change, 0 to destroy.
+```
+
+3. terraform applyコマンドを実行し、EBSボリュームのサイズを変更します。
