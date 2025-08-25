@@ -68,3 +68,9 @@ variable "assign_eip" {
   type        = bool
   default     = false
 }
+
+variable "disable_api_termination" {
+  description = "終了保護を有効にするかどうか"
+  type        = bool
+  default     = true
+}

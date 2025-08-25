@@ -34,11 +34,6 @@ variable "stop_time" {
   type        = string
 }
 
-# variable "timezone" {
-#   description = "踏み台サーバーを起動・停止する時間のタイムゾーン"
-#   type        = string
-# }
-
 variable "vpc_id" {
   description = "踏み台サーバーを配置するVPCのID"
   type        = string
@@ -66,4 +61,10 @@ variable "assign_eip" {
   description = "EC2にEIPを割り当てるかどうか"
   type        = bool
   default     = false
+}
+
+variable "disable_api_termination" {
+  description = "終了保護を有効にするかどうか"
+  type        = bool
+  default     = true
 }

@@ -13,4 +13,5 @@ module "bastion" {
   assign_eip        = var.assign_eip
   region            = var.region
   availability_zone = var.availability_zone
+  disable_api_termination = var.disable_api_termination
 }
