@@ -27,6 +27,14 @@ resource "aws_instance" "this" {
   tags = {
     Name = var.resouce_name
   }
+
+  root_block_device {
+    volume_size           = 30
+    delete_on_termination = true
+    tags = {
+      Name = "${var.resouce_name}-ebs"
+    }
+  }
 }
 
 resource "aws_eip" "this" {
