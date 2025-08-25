@@ -80,20 +80,15 @@ upload: test/backup.md to s3://kato-test/test/backup.md
 
 ### EBSボリュームを拡張する方法
 EC2インスタンスのEBSボリューム容量が足りなくなった場合、後から拡張することができます。
-1. modules/bastion/ec2.tfを開き、root_block_deviceのvolume_sizeを希望のサイズに変更します。 
+1. AWSマネジメントコンソールにログインし、「EC2」サービスを選択します。
+2. 左側メニューの「Elastic Block Store」→「ボリューム」をクリックします。
+3. 拡張したいEC2インスタンスにアタッチされているボリュームを選択します。
+4. 「ボリュームの変更」を選択します。
+5. 「サイズ (GiB)」欄で希望の容量を入力し、「変更」をクリックします。
+6. 拡張が完了したら、EC2インスタンスにSSH等で接続します。
+7. 以下のコマンドで新しいディスクサイズを認識させ、ファイルシステムを拡張します。
 ```
-root_block_device {
-    volume_size           = 60
-    delete_on_termination = true
-    tags = {
-      Name = "${var.resouce_name}-ebs"
-    }
-  }
+$ sudo growpart /dev/xvda 1
+$ sudo resize2fs /dev/xvda1    
 ```
-
-2. terraform planコマンドを実行し、以下の変更内容を表示されることを確認します。
-```
-Plan: 0 to add, 1 to change, 0 to destroy.
-```
-
-3. terraform applyコマンドを実行し、EBSボリュームのサイズを変更します。
+8. df -hコマンドなどで、ディスク容量が増えていることを確認します。
