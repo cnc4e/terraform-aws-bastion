@@ -39,12 +39,6 @@ variable "stop_time" {
   default     = "cron(0 19 ? * MON-FRI *)"
 }
 
-variable "timezone" {
-  description = "踏み台サーバーを起動・停止する時間のタイムゾーン"
-  type        = string
-  default     = "Asia/Tokyo"
-}
-
 variable "vpc_id" {
   description = "踏み台サーバーを配置するVPCのID"
   type        = string

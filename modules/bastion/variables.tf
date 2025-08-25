@@ -34,10 +34,10 @@ variable "stop_time" {
   type        = string
 }
 
-variable "timezone" {
-  description = "踏み台サーバーを起動・停止する時間のタイムゾーン"
-  type        = string
-}
+# variable "timezone" {
+#   description = "踏み台サーバーを起動・停止する時間のタイムゾーン"
+#   type        = string
+# }
 
 variable "vpc_id" {
   description = "踏み台サーバーを配置するVPCのID"
