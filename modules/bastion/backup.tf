@@ -1,8 +1,8 @@
 resource "aws_backup_plan" "this" {
-  name = var.resouce_name
+  name = var.resource_name
 
   rule {
-    rule_name         = var.resouce_name
+    rule_name         = var.resource_name
     target_vault_name = aws_backup_vault.this.name
     schedule          = "cron(0 15 ? * MON-FRI *)"
 
@@ -13,12 +13,12 @@ resource "aws_backup_plan" "this" {
 }
 
 resource "aws_backup_vault" "this" {
-  name = var.resouce_name
+  name = var.resource_name
 }
 
 
 resource "aws_backup_selection" "this" {
-  name         = var.resouce_name
+  name         = var.resource_name
   iam_role_arn = aws_iam_role.backup.arn
   plan_id      = aws_backup_plan.this.id
 

@@ -16,7 +16,7 @@ variable "region" {
   default     = "ap-northeast-1"
 }
 
-variable "resouce_name" {
+variable "resource_name" {
   description = "各種リソースに付ける共通の名前"
   type        = string
 }

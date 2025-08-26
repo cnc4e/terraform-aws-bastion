@@ -9,6 +9,6 @@ resource "aws_security_group" "ec2" {
   }
 
   tags = {
-    Name = "${var.resouce_name}-bastion-ec2"
+    Name = "${var.resource_name}-bastion-ec2"
   }
 }
