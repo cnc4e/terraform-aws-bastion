@@ -1,0 +1,17 @@
+name: Terraform fmt check
+
+on:
+  push:        
+    paths:
+      - '**/*.tf'            
+
+jobs:
+  terraform-fmt:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Terraform
+        uses: hashicorp/setup-terraform@v3
+      - name: Check Terraform formatting
+        run: terraform fmt -check -recursive
