@@ -26,14 +26,14 @@ resource "aws_instance" "this" {
   }
 
   tags = {
-    Name = var.resouce_name
+    Name = var.resource_name
   }
 
   root_block_device {
     volume_size           = 30
     delete_on_termination = true
     tags = {
-      Name = "${var.resouce_name}-ebs"
+      Name = "${var.resource_name}-ebs"
     }
   }
 }
@@ -42,6 +42,6 @@ resource "aws_eip" "this" {
   count    = var.assign_eip ? 1 : 0
   instance = aws_instance.this.id
   tags = {
-    Name = "${var.resouce_name}-eip"
+    Name = "${var.resource_name}-eip"
   }
 }
