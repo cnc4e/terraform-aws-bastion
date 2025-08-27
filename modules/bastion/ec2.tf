@@ -16,8 +16,7 @@ resource "aws_instance" "this" {
   iam_instance_profile    = aws_iam_instance_profile.session_manager.name
   vpc_security_group_ids  = [aws_security_group.ec2.id]
   disable_api_termination = var.disable_api_termination
-
-  user_data = file("${path.module}/script/userdata.sh")
+  user_data               = var.custom_userdata != null ? var.custom_userdata : file("${path.module}/script/userdata.sh")
 
   lifecycle {
     ignore_changes = [
