@@ -104,9 +104,9 @@ $ sudo resize2fs /dev/xvda1
 終了保護は、AWSマネジメントコンソールやAWS CLIでの終了操作をブロックしますが、Terraform destroyでは終了保護が有効でもインスタンスが削除されてしまう場合があります。Terraformによる操作を行う場合は、終了保護の有無に関わらず、インスタンスが削除される可能性があることに十分注意してください。
 
 ### 任意のuserdataを指定する方法
-任意のuserdataを設定したい場合、以下の例のように`custom_userdata`変数にスクリプトを文字列として指定します。
+任意のuserdataを設定したい場合、以下の例のように、`custom_userdata`変数に「カスタムのuserdataファイルのパス」を渡します。
 ```
-custom_userdata = "#!/bin/bash\necho \"Hello from custom user_data\" > /tmp/hello.txt"
+custom_userdata = "./modules/bastion/script/custom_userdata.sh"
 ```
 
-なお、`custom_userdata`変数が未指定の場合は、事前に用意されたデフォルトのuserdataが適用されます。
+なお、`custom_userdata`変数が未指定の場合は、事前に用意されたデフォルトのuserdata.shが適用されます。
