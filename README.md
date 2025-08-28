@@ -110,3 +110,9 @@ custom_userdata = "./modules/bastion/script/custom_userdata.sh"
 ```
 
 なお、`custom_userdata`変数が未指定の場合は、事前に用意されたデフォルトのuserdata.shが適用されます。
+
+また、カスタムのuserdataを適用させる際、スクリプトに「SSMエージェントをインストールする」コマンドを含めるようにしてください。
+```
+yum install -y https://s3.amazonaws.com/ec2-downloads-windows/SSMAgent/latest/linux_amd64/amazon-ssm-agent.rpm
+systemctl start amazon-ssm-agent
+```
