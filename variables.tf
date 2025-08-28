@@ -78,5 +78,5 @@ variable "disable_api_termination" {
 variable "custom_userdata" {
   description = "user_data"
   type        = string
-  default     = null
+  default     = ""
 }

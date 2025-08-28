@@ -58,4 +58,8 @@ curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/inst
 yum install tree -y
 yum install nmap-ncat -y
 yum install ansible -y
+
+# SSMエージェントインストール
+yum install -y https://s3.amazonaws.com/ec2-downloads-windows/SSMAgent/latest/linux_amd64/amazon-ssm-agent.rpm
+systemctl start amazon-ssm-agent
 --//--

@@ -8,6 +8,10 @@ data "aws_ami" "this" {
   }
 }
 
+locals {
+  userdata_path = var.custom_userdata != "" ? var.custom_userdata : "${path.module}/script/userdata.sh"
+}
+
 resource "aws_instance" "this" {
   ami                     = data.aws_ami.this.id
   instance_type           = var.instance_type
@@ -16,7 +20,7 @@ resource "aws_instance" "this" {
   iam_instance_profile    = aws_iam_instance_profile.session_manager.name
   vpc_security_group_ids  = [aws_security_group.ec2.id]
   disable_api_termination = var.disable_api_termination
-  user_data               = var.custom_userdata != null ? var.custom_userdata : file("${path.module}/script/userdata.sh")
+  user_data               = file(local.userdata_path)
 
   lifecycle {
     ignore_changes = [
