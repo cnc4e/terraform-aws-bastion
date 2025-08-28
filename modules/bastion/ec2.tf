@@ -2,7 +2,7 @@ data "aws_ami" "this" {
   most_recent = true
   owners      = ["amazon"]
   filter {
-    name = "name"
+    name   = "name"
     values = ["al2023-ami-2023.8.20250818.0-kernel-6.1-x86_64"]
   }
 }
