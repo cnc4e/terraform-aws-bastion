@@ -29,6 +29,7 @@ module "bastion" {
 }
 EOF
 ```
+各変数の一覧はREADME.mdのInputを参照してください。
 
 2. 以下コマンドを実行してください。
 ```
