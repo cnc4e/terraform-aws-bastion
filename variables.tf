@@ -40,19 +40,19 @@ variable "stop_time" {
 }
 
 variable "vpc_id" {
-  description = "踏み台サーバーを配置するVPCのID"
+  description = "踏み台サーバーを配置するVPCのID（未指定の場合は自動生成）"
   type        = string
   default     = ""
 }
 
 variable "subnet_id" {
-  description = "踏み台サーバーを配置するサブネットのID"
+  description = "踏み台サーバーを配置するサブネットのID（未指定の場合は自動生成）"
   type        = string
   default     = ""
 }
 
 variable "availability_zone" {
-  description = "アベイラビリティゾーン"
+  description = "サブネットのアベイラビリティゾーン"
   type        = string
   default     = "ap-northeast-1a"
 }
@@ -76,7 +76,7 @@ variable "disable_api_termination" {
 }
 
 variable "custom_userdata" {
-  description = "user_data"
+  description = "カスタムのユーザーデータのパス（未指定の場合はデフォルトのユーザーデータを使用）"
   type        = string
   default     = ""
 }
