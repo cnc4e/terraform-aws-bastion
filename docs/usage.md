@@ -16,6 +16,7 @@ sudo yum -y install terraform
 1. 以下のコマンドを実行してください。  
 なお、後ろにコメントアウトで説明がある変数は自分で設定する必要があります。コメントの内容に従ってください。  
 また、tfファイルの`set.tf`のファイル名は任意です。
+各変数の一覧はREADME.mdのInputを参照してください。
 ```
 cat <<EOF > set.tf
 module "bastion" {
