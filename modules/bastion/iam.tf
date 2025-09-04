@@ -21,6 +21,9 @@ resource "aws_iam_role_policy_attachment" "session_manager" {
 resource "aws_iam_instance_profile" "session_manager" {
   name = "${var.resource_name}-session-manager-profile"
   role = aws_iam_role.session_manager.name
+  tags = {
+    Name = "${var.resource_name}-session-manager-profile"
+  }
 }
 
 # Schedule for bastion server
