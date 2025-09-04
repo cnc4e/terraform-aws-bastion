@@ -11,11 +11,19 @@ resource "aws_backup_plan" "this" {
       delete_after = var.generation
     }
   }
+
+  tags = {
+    Name = "${var.resource_name}-backup-plan"
+  }
 }
 
 resource "aws_backup_vault" "this" {
   count = var.enable_backup ? 1 : 0
   name  = var.resource_name
+
+  tags = {
+    Name = "${var.resource_name}-backup-vault"
+  }
 }
 
 

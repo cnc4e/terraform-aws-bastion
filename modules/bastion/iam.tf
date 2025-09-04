@@ -3,6 +3,10 @@
 resource "aws_iam_role" "session_manager" {
   name               = "${var.resource_name}-session-manager"
   assume_role_policy = file("${path.module}/policy/session_manager_policy.json")
+
+  tags = {
+    Name = "${var.resource_name}-session-manager-role"
+  }
 }
 
 data "aws_iam_policy" "session_manager" {
@@ -17,6 +21,9 @@ resource "aws_iam_role_policy_attachment" "session_manager" {
 resource "aws_iam_instance_profile" "session_manager" {
   name = "${var.resource_name}-session-manager-profile"
   role = aws_iam_role.session_manager.name
+  tags = {
+    Name = "${var.resource_name}-session-manager-profile"
+  }
 }
 
 # Schedule for bastion server
@@ -24,11 +31,17 @@ resource "aws_iam_instance_profile" "session_manager" {
 resource "aws_iam_role" "ec2_schedule" {
   name               = "${var.resource_name}-bastion-schedule"
   assume_role_policy = file("${path.module}/policy/ec2_schedule.json")
+  tags = {
+    Name = "${var.resource_name}-bastion-schedule-role"
+  }
 }
 
 resource "aws_iam_policy" "ec2_schedule" {
   name   = "${var.resource_name}-bastion-schedule"
   policy = file("${path.module}/policy/ec2_schedule_policy.json")
+  tags = {
+    Name = "${var.resource_name}-bastion-schedule-policy"
+  }
 }
 
 resource "aws_iam_role_policy_attachment" "ec2_schedule" {
@@ -40,6 +53,9 @@ resource "aws_iam_role_policy_attachment" "ec2_schedule" {
 resource "aws_iam_role" "backup" {
   name               = "${var.resource_name}-bastion-backup"
   assume_role_policy = file("${path.module}/policy/backup_assum_role_policy.json")
+  tags = {
+    Name = "${var.resource_name}-bastion-backup-role"
+  }
 }
 
 resource "aws_iam_role_policy_attachment" "backup_backup" {
@@ -61,6 +77,9 @@ resource "aws_iam_policy" "backup" {
       bastion_instance_iam = aws_iam_role.session_manager.arn
     }
   )
+  tags = {
+    Name = "${var.resource_name}-backup-policy"
+  }
 }
 
 resource "aws_iam_role_policy_attachment" "backup_role" {
