@@ -36,7 +36,7 @@ resource "aws_iam_role" "ec2_schedule" {
 resource "aws_iam_policy" "ec2_schedule" {
   name   = "${var.resource_name}-bastion-schedule"
   policy = file("${path.module}/policy/ec2_schedule_policy.json")
-  tags ={
+  tags = {
     Name = "${var.resource_name}-bastion-schedule-policy"
   }
 }
