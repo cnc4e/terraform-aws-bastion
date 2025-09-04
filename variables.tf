@@ -80,3 +80,9 @@ variable "custom_userdata" {
   type        = string
   default     = ""
 }
+
+variable "enable_backup" {
+  description = "バックアップ設定を有効にするかどうか"
+  type        = bool
+  default     = true
+}
