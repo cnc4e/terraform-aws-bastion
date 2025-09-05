@@ -20,13 +20,28 @@ sudo yum -y install terraform
 ```
 cat <<EOF > set.tf
 module "bastion" {
-  source       = "cnc4e/bastion/aws"
-  version      = "0.1.0" #使うバージョンの指定。基本的にはlatestとなっているバージョンを記述してください。
+  source                  = "cnc4e/bastion/aws"
+  version                 = "0.1.0"           #使うバージョンの指定。基本的にはlatestとなっているバージョンを記述してください。
 
-  # insert the 3 required variables here(defaultで決めていない変数は以下のように自分で記述しないとエラーになります)
-  resouce_name = "sample" #各種リソースに付ける名前
-  subnet_id    = "subnet-aaa" #サーバーを配置するサブネットのID。
-  vpc_id       = "vpc-aaa" #サーバーを配置するVPCのID。
+  # 必須変数 (default が無いもの)
+  resource_name           = "sample"          # 各種リソースに付ける共通の名前 (必須)
+
+  # 既存 VPC / サブネット を利用する場合 (指定しないと自動作成)
+  vpc_id                  = "vpc-xxxxx"       # 既存VPC ID (任意)
+  subnet_id               = "subnet-xxxxx"    # 既存サブネット ID (任意)
+
+  # オプション
+  instance_type           = "t3.micro"        # 踏み台サーバーで使うインスタンスタイプ
+  start_time              = "cron(0 0 * * ? *)" # 起動スケジュール
+  stop_time               = "cron(0 9 * * ? *)" # 停止スケジュール
+  generation              = 7                  # バックアップ保持世代数
+  region                  = "ap-northeast-3"  # VPCのリージョン
+  availability_zone       = "ap-northeast-3a" #サブネットのアベイラビリティゾーン
+  vpc_cidr                = "10.1.0.0/16"     #VPCのCIDRブロック
+  subnet_cidr             = "10.1.1.0/24"     #サブネットのCIDRブロック
+  assign_eip              = true               #EC2にEIPを割り当てるかどうか
+  disable_api_termination = true               #終了保護を有効にするかどうか
+  custom_userdata         = "./userdata.sh"   # 独自のユーザーデータを使う場合のファイルパス
 }
 EOF
 ```
