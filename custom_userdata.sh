@@ -64,5 +64,5 @@ yum install -y https://s3.amazonaws.com/ec2-downloads-windows/SSMAgent/latest/li
 systemctl start amazon-ssm-agent
 
 # ユーザーデータ実行テスト用ファイル作成
-echo "#####custom_userdata executed: $(date)" > /tmp/userdata_test.txt
+echo "!?!?custom_userdata executed: $(date)" > /tmp/userdata_test.txt
 --//--
