@@ -75,12 +75,6 @@ variable "disable_api_termination" {
   default     = true
 }
 
-variable "custom_userdata" {
-  description = "カスタムのユーザーデータのパス（未指定の場合はデフォルトのユーザーデータを使用）"
-  type        = string
-  default     = ""
-}
-
 variable "enable_backup" {
   description = "バックアップ設定を有効にするかどうか"
   type        = bool

@@ -14,6 +14,5 @@ module "bastion" {
   region                  = var.region
   availability_zone       = var.availability_zone
   disable_api_termination = var.disable_api_termination
-  custom_userdata         = var.custom_userdata != "" ? file("${path.root}/${var.custom_userdata}") : file("${path.module}/modules/bastion/script/userdata.sh")
   enable_backup           = var.enable_backup
 }
