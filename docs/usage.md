@@ -41,7 +41,6 @@ module "bastion" {
   subnet_cidr             = "10.1.1.0/24"     #サブネットのCIDRブロック
   assign_eip              = true               #EC2にEIPを割り当てるかどうか
   disable_api_termination = true               #終了保護を有効にするかどうか
-  custom_userdata         = "./userdata.sh"   # 独自のユーザーデータを使う場合のファイルパス
 }
 EOF
 ```
