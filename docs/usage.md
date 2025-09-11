@@ -195,6 +195,17 @@ region = ap-northeast-1
 output = json
 ca_bundle = C:\Users\{your_username}\.ssh\test.crt
 ```
+## scpコマンドを用いて踏み台サーバーからローカル端末へファイルを転送する方法
+1.`{.sshまでのパス}\config`に以下の内容を追記します。
+```
+host i-* mi-*
+    ProxyCommand "C:\Program Files\Git\usr\bin\sh.exe" -c "aws ssm start-session --target %h --document-name AWS-StartSSHSession --parameters 'portNumber=%p' --region {リージョン}"
+```
+
+2.ローカル端末上で以下を実行します。
+```
+scp -i {秘密鍵ファイルのパス} {ユーザー名}@{インスタンスID}:{EC2上のファイルパス} {ローカルの保存先パス}
+```
 
 ## 踏み台サーバーリソースの削除
 ここでは作成した踏み台サーバーを削除する方法を説明します。  
