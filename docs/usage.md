@@ -1,6 +1,6 @@
 ## 実行手順
 ### CloudShell起動
-AWSマネージドコンソールにログインし、画面下の`CloudShell`よりCloudShell起動してください。このときリージョンがリソースを作りたい場所に指定されていることを確認してください。
+AWSマネージドコンソールにログインし、画面下の`CloudShell`よりCloudShell起動してください。
 
 ### Terraformインストール
 以下のコマンドを入力してTerraformをインストールしてください。
@@ -16,7 +16,7 @@ sudo yum -y install terraform
 1. 以下のコマンドを実行してください。  
 なお、後ろにコメントアウトで説明がある変数は自分で設定する必要があります。コメントの内容に従ってください。  
 また、tfファイルの`set.tf`のファイル名は任意です。
-各変数の一覧はREADME.mdのInputを参照してください。
+各変数の一覧は[README.mdのInput](https://registry.terraform.io/modules/cnc4e/bastion/aws/latest#inputs-1)を参照してください。
 ```
 cat <<EOF > set.tf
 module "bastion" {
@@ -35,7 +35,7 @@ module "bastion" {
   start_time              = "cron(0 0 * * ? *)" # 起動スケジュール
   stop_time               = "cron(0 9 * * ? *)" # 停止スケジュール
   generation              = 7                  # バックアップ保持世代数
-  region                  = "ap-northeast-3"  # VPCのリージョン
+  region                  = "ap-northeast-3"  # リソースが作られるリージョン
   availability_zone       = "ap-northeast-3a" #サブネットのアベイラビリティゾーン
   vpc_cidr                = "10.1.0.0/16"     #VPCのCIDRブロック
   subnet_cidr             = "10.1.1.0/24"     #サブネットのCIDRブロック
