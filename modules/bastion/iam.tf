@@ -52,7 +52,7 @@ resource "aws_iam_role_policy_attachment" "ec2_schedule" {
 # backup
 resource "aws_iam_role" "backup" {
   name               = "${var.resource_name}-bastion-backup"
-  assume_role_policy = file("${path.module}/policy/backup_assum_role_policy.json")
+  assume_role_policy = file("${path.module}/policy/backup_assume_role_policy.json")
   tags = {
     Name = "${var.resource_name}-bastion-backup-role"
   }
