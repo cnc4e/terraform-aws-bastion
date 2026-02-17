@@ -1,6 +1,6 @@
 ## 実行手順
 ### CloudShell起動
-AWSマネージドコンソールにログインし、画面下の`CloudShell`よりCloudShell起動してください。
+AWSマネージドコンソールにログインし、画面下の`CloudShell`よりCloudShellを起動してください。
 
 ### Terraformインストール
 以下のコマンドを入力してTerraformをインストールしてください。
