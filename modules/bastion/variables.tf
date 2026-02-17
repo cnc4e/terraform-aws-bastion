@@ -57,6 +57,12 @@ variable "generation" {
   type        = number
 }
 
+variable "backup_schedule" {
+  description = "バックアップの実行スケジュール（cron形式）"
+  type        = string
+  default     = "cron(0 15 ? * MON-FRI *)"
+}
+
 variable "assign_eip" {
   description = "EC2にEIPを割り当てるかどうか"
   type        = bool

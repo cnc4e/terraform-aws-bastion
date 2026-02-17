@@ -30,8 +30,10 @@ No resources.
 |------|-------------|------|---------|:--------:|
 | <a name="input_assign_eip"></a> [assign\_eip](#input\_assign\_eip) | EC2にEIPを割り当てるかどうか | `bool` | `false` | no |
 | <a name="input_availability_zone"></a> [availability\_zone](#input\_availability\_zone) | サブネットのアベイラビリティゾーン | `string` | `"ap-northeast-1a"` | no |
+| <a name="input_backup_schedule"></a> [backup\_schedule](#input\_backup\_schedule) | バックアップの実行スケジュール（cron形式） | `string` | `"cron(0 15 ? * MON-FRI *)"` | no |
 | <a name="input_custom_userdata"></a> [custom\_userdata](#input\_custom\_userdata) | カスタムのユーザーデータのパス（未指定の場合はデフォルトのユーザーデータを使用） | `string` | `""` | no |
 | <a name="input_disable_api_termination"></a> [disable\_api\_termination](#input\_disable\_api\_termination) | 終了保護を有効にするかどうか | `bool` | `true` | no |
+| <a name="input_enable_backup"></a> [enable\_backup](#input\_enable\_backup) | バックアップ設定を有効にするかどうか | `bool` | `true` | no |
 | <a name="input_generation"></a> [generation](#input\_generation) | バックアップの世代数 | `number` | `10` | no |
 | <a name="input_instance_type"></a> [instance\_type](#input\_instance\_type) | 踏み台サーバーで使うインスタンスタイプ | `string` | `"t2.medium"` | no |
 | <a name="input_region"></a> [region](#input\_region) | VPCのリージョン | `string` | `"ap-northeast-1"` | no |
@@ -53,8 +55,10 @@ No resources.
 
 ### バックアップについて
 踏み台サーバーのバックアップ方法としてAWS Backupを使っています。
-バックアップは平日の0時に自動実行されます。
+バックアップはデフォルトで平日の0時（日本時間）に自動実行されます。
+バックアップスケジュールは`backup_schedule`変数でcron形式により変更が可能です（デフォルト: `cron(0 15 ? * MON-FRI *)`）。
 世代数はデフォルトでは10ですが、`generation`変数を指定することで変更が可能です。
+バックアップ機能を無効にしたい場合は、`enable_backup`変数を`false`に設定してください。
 バックアップよりサーバーをリストアした場合、そのバックアップ時のインスタンスが新規で作られます。
 そのため、**インスタンスをリストアした後に、そのリソースをtfstateファイルに認識させる必要がある**ことに注意してください。
 
