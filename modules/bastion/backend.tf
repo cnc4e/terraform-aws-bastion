@@ -1,8 +1,8 @@
 resource "aws_s3_bucket" "tfstate" {
-  bucket = "terraform-aws-bastion-tfstate"
+  bucket = var.tfstate_bucket_name
 
   tags = {
-    Name = "terraform-aws-bastion-tfstate"
+    Name = var.tfstate_bucket_name
   }
 }
 
