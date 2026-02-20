@@ -5,7 +5,7 @@ resource "aws_backup_plan" "this" {
   rule {
     rule_name         = var.resource_name
     target_vault_name = aws_backup_vault.this[0].name
-    schedule          = "cron(0 15 ? * MON-FRI *)"
+    schedule          = var.backup_schedule
 
     lifecycle {
       delete_after = var.generation
