@@ -1,6 +1,7 @@
 resource "aws_backup_plan" "this" {
   count = var.enable_backup ? 1 : 0
-  name  = var.resource_name
+
+  name = var.resource_name
 
   rule {
     rule_name         = var.resource_name
@@ -19,7 +20,8 @@ resource "aws_backup_plan" "this" {
 
 resource "aws_backup_vault" "this" {
   count = var.enable_backup ? 1 : 0
-  name  = var.resource_name
+
+  name = var.resource_name
 
   tags = {
     Name = "${var.resource_name}-backup-vault"
@@ -28,7 +30,8 @@ resource "aws_backup_vault" "this" {
 
 
 resource "aws_backup_selection" "this" {
-  count        = var.enable_backup ? 1 : 0
+  count = var.enable_backup ? 1 : 0
+
   name         = var.resource_name
   iam_role_arn = aws_iam_role.backup.arn
   plan_id      = aws_backup_plan.this[0].id
