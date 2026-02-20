@@ -1,6 +1,7 @@
 data "aws_ami" "this" {
   most_recent = true
   owners      = ["amazon"]
+
   filter {
     name   = "name"
     values = ["al2023-ami-*-kernel-6.1-x86_64"] # x86_64
@@ -17,16 +18,6 @@ resource "aws_instance" "this" {
   disable_api_termination = var.disable_api_termination
   user_data               = file("${path.module}/script/userdata.sh")
 
-  lifecycle {
-    ignore_changes = [
-      ami,
-    ]
-  }
-
-  tags = {
-    Name = var.resource_name
-  }
-
   root_block_device {
     volume_size           = 30
     delete_on_termination = true
@@ -34,11 +25,22 @@ resource "aws_instance" "this" {
       Name = "${var.resource_name}-ebs"
     }
   }
+
+  tags = {
+    Name = var.resource_name
+  }
+
+  lifecycle {
+    ignore_changes = [
+      ami,
+    ]
+  }
 }
 
 resource "aws_eip" "this" {
   count    = var.assign_eip ? 1 : 0
   instance = aws_instance.this.id
+
   tags = {
     Name = "${var.resource_name}-eip"
   }
