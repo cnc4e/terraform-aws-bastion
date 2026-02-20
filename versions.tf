@@ -7,6 +7,14 @@ terraform {
       source  = "hashicorp/aws"
     }
   }
+
+  backend "s3" {
+    bucket       = "terraform-aws-bastion-tfstate"
+    key          = "bastion.tfstate"
+    region       = "ap-northeast-3"
+    encrypt      = true
+    use_lockfile = true
+  }
 }
 
 provider "aws" {
