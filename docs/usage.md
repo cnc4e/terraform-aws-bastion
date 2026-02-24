@@ -45,30 +45,46 @@ module "bastion" {
 EOF
 ```
 
-2. 以下コマンドを実行してください。
+2. このモジュールはtfstateをS3バケットで管理します。初回実行時はS3バケットがまだ存在しないため、以下の手順でセットアップしてください。
+
+### S3バケットにtfstateをアップロードする
+
+このモジュールはtfstateをS3バケットで管理しています。初回実行時は以下の手順でセットアップします。
+
+1. `versions.tf`ファイルを開き、`backend "s3"`ブロック全体をコメントアウトしてください。
+```terraform
+  # backend "s3" {
+  #   bucket       = "terraform-aws-bastion-tfstate"
+  #   key          = "bastion.tfstate"
+  #   region       = "ap-northeast-3"
+  #   encrypt      = true
+  #   use_lockfile = true
+  # }
+```
+
+2. S3バケット等のリソースを作成します。
 ```
 terraform init
 terraform plan #ここで、作成されるリソースが正しいか確認してください。
 terraform apply #リソースを作成していいかの確認があるので、その時にyesと入力してください。
 ```
-3. 最後に、`Apply complete`と表示されたら完了です。  
-ここで、CloudShellは終了しないでください。
 
-### CloudShellからtfstateをダウンロードする
-CloudShellのボリュームは一時的なものを使っています。  
-そのため、CloudShellでリソースを作成した場合、tfstateファイルが消えてしまい`terraform destroy`でリソース削除ができなくなってしまいます。  
-以下は、CloudShellからファイルをダウンロードする方法を記述します。
+3. `Apply complete`と表示されたら、`versions.tf`の`backend "s3"`ブロックのコメントアウトを解除してください。
 
-1. 以下コマンドを実行し、tfstateがあるディレクトリまでのパスと、tfstateとtfファイル名を確認してください。
+4. 再度`terraform init`を実行します。  
+ローカルのtfstateをS3バケットにアップロードするか確認されるので、`yes`と入力してください。
 ```
-pwd
-ls
+terraform init
 ```
 
-2. 右上の"アクション"より"ファイルのダウンロード"を選択します。  
-そこに書かれている通り、ダウンロードするtfstateとtfファイルまでのパスを入力し、ローカル端末にダウンロードします。  
+5. 以下のメッセージが表示されたら完了です。
+```
+Successfully configured the backend "s3"! Terraform will automatically
+use this backend unless the backend configuration changes.
+```
 
-このファイルは踏み台サーバーを削除するために使うため、**任意の場所に保管してください**。
+これで、tfstateがS3バケット(`terraform-aws-bastion-tfstate`)で管理されるようになりました。  
+CloudShellのボリュームが削除されても、tfstateはS3に保存されているため、`terraform destroy`でリソース削除が可能です。
 
 ## VSCodeでセッションマネージャーを使う手順
 ### aws cliのインストール
@@ -210,9 +226,9 @@ scp -i {秘密鍵ファイルのパス} {ユーザー名}@{インスタンスID}
 ここでは作成した踏み台サーバーを削除する方法を説明します。  
 
 1. CloudShellを起動します。  
-2. 右上の"アクション"より"ファイルのアップロード"を選択し、手順[CloudShellからtfstateをダウンロードする](#cloudshellからtfstateをダウンロードする)でダウンロードしたファイルをアップロードしてください。  
-3. その後、以下コマンドで踏み台サーバーを削除してください。
+2. tfファイルを作成または配置します。  
+3. 以下コマンドで踏み台サーバーを削除してください。
 ```
-terraform init
+terraform init  # S3バケットからtfstateを自動的に読み込みます
 terraform destroy
 ```
