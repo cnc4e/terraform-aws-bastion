@@ -62,3 +62,8 @@ output "backup_selection" {
   description = "バックアップするサーバーの指定"
   value       = aws_backup_selection.this
 }
+
+output "tfstate_bucket" {
+  description = "tfstate保存用のS3バケット"
+  value       = aws_s3_bucket.tfstate
+}

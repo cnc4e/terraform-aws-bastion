@@ -15,4 +15,5 @@ module "bastion" {
   availability_zone       = var.availability_zone
   disable_api_termination = var.disable_api_termination
   enable_backup           = var.enable_backup
+  tfstate_bucket_name     = var.tfstate_bucket_name
 }

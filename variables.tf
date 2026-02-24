@@ -80,3 +80,9 @@ variable "enable_backup" {
   type        = bool
   default     = true
 }
+
+variable "tfstate_bucket_name" {
+  description = "Terraform StateファイルをS3に保存するためのS3バケット名"
+  type        = string
+  default     = "terraform-aws-bastion-tfstate"
+}
