@@ -48,38 +48,6 @@ module "bastion" {
 EOF
 ```
 
-**versions.tf**（Terraform設定とbackend設定）
-
-デフォルトではtfstateはCloudShellのローカルに保存されます（`backend "s3"`ブロックはコメントアウト済み）。  
-S3バックエンドで管理する場合は、後述の[S3バックエンドで管理する](#s3バックエンドで管理する)の手順に従ってください。
-```
-cat <<'EOF' > versions.tf
-terraform {
-  required_version = ">= 1.8.5"
-  
-  required_providers {
-    aws = {
-      source  = "hashicorp/aws"
-      version = ">= 5.58.0"
-    }
-  }
-  
-  # S3バックエンドで管理する場合はコメントアウトを解除してください（デフォルトはローカル管理）
-  # backend "s3" {
-  #   bucket       = "terraform-aws-bastion-tfstate"
-  #   key          = "bastion.tfstate"
-  #   region       = "ap-northeast-3"
-  #   encrypt      = true
-  #   use_lockfile = true
-  # }
-}
-
-provider "aws" {
-  region = "ap-northeast-3"  # 使用するリージョン
-}
-EOF
-```
-
 2. 以下のコマンドを実行し、踏み台サーバーを作成してください。
 ```
 terraform init
@@ -101,8 +69,19 @@ terraform apply # リソースを作成していいかの確認があるので�
 
 初回実行時は以下の手順でS3バケットにtfstateをアップロードします。
 
-1. `versions.tf`ファイルを開き、`backend "s3"`ブロック全体のコメントアウトを解除してください。
-```terraform
+1. 以下のコマンドを実行し、`backend "s3"`ブロックを含む`versions.tf`を作成してください。
+```
+cat <<'EOF' > versions.tf
+terraform {
+  required_version = ">= 1.8.5"
+
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = ">= 5.58.0"
+    }
+  }
+
   backend "s3" {
     bucket       = "terraform-aws-bastion-tfstate"
     key          = "bastion.tfstate"
@@ -110,6 +89,12 @@ terraform apply # リソースを作成していいかの確認があるので�
     encrypt      = true
     use_lockfile = true
   }
+}
+
+provider "aws" {
+  region = "ap-northeast-3"  # 使用するリージョン
+}
+EOF
 ```
 
 2. 再度`terraform init`を実行します。  
@@ -127,7 +112,9 @@ use this backend unless the backend configuration changes.
 これで、tfstateがS3バケット(`terraform-aws-bastion-tfstate`)で管理されるようになりました。  
 CloudShellのボリュームが削除されても、tfstateはS3に保存されているため、`terraform destroy`でリソース削除が可能です。
 
-### CloudShellからtfstateをダウンロードする
+### ローカルで管理する
+
+#### CloudShellからtfstateをダウンロードする
 CloudShellのボリュームは一時的なものを使っています。  
 そのため、CloudShellでリソースを作成した場合、tfstateファイルが消えてしまい`terraform destroy`でリソース削除ができなくなってしまいます。  
 以下は、CloudShellからファイルをダウンロードする方法を記述します。
