@@ -5,8 +5,8 @@
   - [Terraformインストール](#terraformインストール)
   - [踏み台サーバー作成](#踏み台サーバー作成)
   - [tfstateの管理方法を選択する](#tfstateの管理方法を選択する)
-  - [S3バックエンドで管理する](#s3バックエンドで管理する)
-  - [ローカルで管理する](#ローカルで管理する)
+    - [S3バックエンドで管理する](#s3バックエンドで管理する)
+    - [ローカルで管理する](#ローカルで管理する)
 - [VSCodeでセッションマネージャーを使う手順](#vscodeでセッションマネージャーを使う手順)
   - [aws cliのインストール](#aws-cliのインストール)
   - [aws configureの設定](#aws-configureの設定)
@@ -86,7 +86,7 @@ terraform apply # リソースを作成していいかの確認があるので�
 | **S3バックエンドで管理する（推奨）** | tfstateをS3バケットで管理します。CloudShellのボリュームが削除されてもtfstateはS3に保存されているため安全です。 |
 | **ローカルで管理する** | tfstateをCloudShellのローカルに保存します。ボリュームは一時的なため、踏み台サーバーの削除に必要なtfstateを必ずローカル端末へダウンロードしてください。 |
 
-### S3バックエンドで管理する
+#### S3バックエンドで管理する
 
 踏み台モジュールで作成したtfstate格納用のS3バケットにtfstateをアップロードするには以下の手順を行います。
 
@@ -134,9 +134,9 @@ use this backend unless the backend configuration changes.
 これで、tfstateがS3バケット(`terraform-aws-bastion-tfstate`)で管理されるようになりました。  
 CloudShellのボリュームが削除されても、tfstateはS3に保存されているため、`terraform destroy`でリソース削除が可能です。
 
-### ローカルで管理する
+#### ローカルで管理する
 
-#### CloudShellからtfstateをダウンロードする
+##### CloudShellからtfstateをダウンロードする
 CloudShellのボリュームは一時的なものを使っています。  
 そのため、CloudShellでリソースを作成した場合、tfstateファイルが消えてしまい`terraform destroy`でリソース削除ができなくなってしまいます。  
 以下は、CloudShellからファイルをダウンロードする方法を記述します。
