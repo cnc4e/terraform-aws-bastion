@@ -1,3 +1,24 @@
+## 目次
+
+- [実行手順](#実行手順)
+  - [CloudShell起動](#cloudshell起動)
+  - [Terraformインストール](#terraformインストール)
+  - [踏み台サーバー作成](#踏み台サーバー作成)
+  - [tfstateの管理方法を選択する](#tfstateの管理方法を選択する)
+    - [S3バックエンドで管理する](#s3バックエンドで管理する)
+    - [ローカルで管理する](#ローカルで管理する)
+- [VSCodeでセッションマネージャーを使う手順](#vscodeでセッションマネージャーを使う手順)
+  - [aws cliのインストール](#aws-cliのインストール)
+  - [aws configureの設定](#aws-configureの設定)
+  - [SessionManagerPluginのインストール](#sessionmanagerpluginのインストール)
+  - [VSCodeインストール](#vscodeインストール)
+  - [SSHキーの作成・EC2への登録](#sshキーの作成ec2への登録)
+  - [VSCodeで接続](#vscodeで接続)
+- [scpコマンドを用いて踏み台サーバーからローカル端末へファイルを転送する方法](#scpコマンドを用いて踏み台サーバーからローカル端末へファイルを転送する方法)
+- [踏み台サーバーリソースの削除](#踏み台サーバーリソースの削除)
+  - [S3バックエンドで管理している場合](#s3バックエンドで管理している場合)
+  - [ローカルで管理している場合](#ローカルで管理している場合)
+
 ## 実行手順
 ### CloudShell起動
 AWSマネージドコンソールにログインし、画面下の`CloudShell`よりCloudShellを起動してください。
@@ -17,11 +38,13 @@ sudo yum -y install terraform
 なお、後ろにコメントアウトで説明がある変数は自分で設定する必要があります。コメントの内容に従ってください。  
 また、tfファイルの`set.tf`のファイル名は任意です。
 各変数の一覧は[README.mdのInput](https://registry.terraform.io/modules/cnc4e/bastion/aws/latest#inputs-1)を参照してください。
+
+**set.tf**（モジュール呼び出し）
 ```
 cat <<EOF > set.tf
 module "bastion" {
   source                  = "cnc4e/bastion/aws"
-  version                 = "0.1.0"           #使うバージョンの指定。基本的にはlatestとなっているバージョンを記述してください。
+  version                 = "0.1.0"           # 使うバージョンの指定。基本的にはlatestとなっているバージョンを記述してください。
 
   # 必須変数 (default が無いもの)
   resource_name           = "sample"          # 各種リソースに付ける共通の名前 (必須)
@@ -31,30 +54,89 @@ module "bastion" {
   subnet_id               = "subnet-xxxxx"    # 既存サブネット ID (任意)
 
   # オプション
-  instance_type           = "t3.micro"        # 踏み台サーバーで使うインスタンスタイプ
-  start_time              = "cron(0 0 * * ? *)" # 起動スケジュール
-  stop_time               = "cron(0 9 * * ? *)" # 停止スケジュール
-  generation              = 7                  # バックアップ保持世代数
-  region                  = "ap-northeast-3"  # リソースが作られるリージョン
-  availability_zone       = "ap-northeast-3a" #サブネットのアベイラビリティゾーン
-  vpc_cidr                = "10.1.0.0/16"     #VPCのCIDRブロック
-  subnet_cidr             = "10.1.1.0/24"     #サブネットのCIDRブロック
-  assign_eip              = true               #EC2にEIPを割り当てるかどうか
-  disable_api_termination = true               #終了保護を有効にするかどうか
+  instance_type           = "t3.micro"              # 踏み台サーバーで使うインスタンスタイプ
+  start_time              = "cron(0 0 * * ? *)"     # 起動スケジュール
+  stop_time               = "cron(0 9 * * ? *)"     # 停止スケジュール
+  generation              = 7                        # バックアップ保持世代数
+  region                  = "ap-northeast-3"        # リソースが作られるリージョン
+  availability_zone       = "ap-northeast-3a"       # サブネットのアベイラビリティゾーン
+  vpc_cidr                = "10.1.0.0/16"           # VPCのCIDRブロック
+  subnet_cidr             = "10.1.1.0/24"           # サブネットのCIDRブロック
+  assign_eip              = true                     # EC2にEIPを割り当てるかどうか
+  disable_api_termination = true                     # 終了保護を有効にするかどうか
+  tfstate_bucket_name     = "terraform-aws-bastion-tfstate"  # tfstate保存用S3バケット名
 }
 EOF
 ```
 
-2. 以下コマンドを実行してください。
+2. 以下のコマンドを実行し、踏み台サーバーを作成してください。
 ```
 terraform init
-terraform plan #ここで、作成されるリソースが正しいか確認してください。
-terraform apply #リソースを作成していいかの確認があるので、その時にyesと入力してください。
+terraform plan  # ここで、作成されるリソースが正しいか確認してください。
+terraform apply # リソースを作成していいかの確認があるので、その時にyesと入力してください。
 ```
-3. 最後に、`Apply complete`と表示されたら完了です。  
-ここで、CloudShellは終了しないでください。
 
-### CloudShellからtfstateをダウンロードする
+`Apply complete`と表示されたら踏み台サーバーの作成は完了です。  
+その後はtfstateの管理方法として以下のいずれかを選択してください。
+
+### tfstateの管理方法を選択する
+
+| 方法 | 説明 |
+|------|------|
+| **S3バックエンドで管理する（推奨）** | tfstateをS3バケットで管理します。CloudShellのボリュームが削除されてもtfstateはS3に保存されているため安全です。 |
+| **ローカルで管理する** | tfstateをCloudShellのローカルに保存します。ボリュームは一時的なため、踏み台サーバーの削除に必要なtfstateを必ずローカル端末へダウンロードしてください。 |
+
+#### S3バックエンドで管理する
+
+踏み台モジュールで作成したtfstate格納用のS3バケットにtfstateをアップロードするには以下の手順を行います。
+
+1. `set.tf`と同じディレクトリで以下のコマンドを実行し、`backend "s3"`ブロックを含む`versions.tf`を作成してください。  
+`bucket`の値は`set.tf`の`tfstate_bucket_name`と一致させてください。デフォルト値から変更した場合は、以下の`terraform-aws-bastion-tfstate`を変更後のバケット名に書き換えてください。
+```
+cat <<'EOF' > versions.tf
+terraform {
+  required_version = ">= 1.8.5"
+
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = ">= 5.58.0"
+    }
+  }
+
+  backend "s3" {
+    bucket       = "terraform-aws-bastion-tfstate"
+    key          = "bastion.tfstate"
+    region       = "ap-northeast-3"
+    encrypt      = true
+    use_lockfile = true
+  }
+}
+
+provider "aws" {
+  region = "ap-northeast-3"  # 使用するリージョン
+}
+EOF
+```
+
+2. 再度`terraform init`を実行します。  
+ローカルのtfstateをS3バケットにアップロードするか確認されるので、`yes`と入力してください。
+```
+terraform init
+```
+
+3. 以下のメッセージが表示されたら完了です。
+```
+Successfully configured the backend "s3"! Terraform will automatically
+use this backend unless the backend configuration changes.
+```
+
+これで、tfstateがS3バケット(`terraform-aws-bastion-tfstate`)で管理されるようになりました。  
+CloudShellのボリュームが削除されても、tfstateはS3に保存されているため、`terraform destroy`でリソース削除が可能です。
+
+#### ローカルで管理する
+
+##### CloudShellからtfstateをダウンロードする
 CloudShellのボリュームは一時的なものを使っています。  
 そのため、CloudShellでリソースを作成した場合、tfstateファイルが消えてしまい`terraform destroy`でリソース削除ができなくなってしまいます。  
 以下は、CloudShellからファイルをダウンロードする方法を記述します。
@@ -209,9 +291,25 @@ scp -i {秘密鍵ファイルのパス} {ユーザー名}@{インスタンスID}
 ## 踏み台サーバーリソースの削除
 ここでは作成した踏み台サーバーを削除する方法を説明します。  
 
+### S3バックエンドで管理している場合
+
 1. CloudShellを起動します。  
-2. 右上の"アクション"より"ファイルのアップロード"を選択し、手順[CloudShellからtfstateをダウンロードする](#cloudshellからtfstateをダウンロードする)でダウンロードしたファイルをアップロードしてください。  
-3. その後、以下コマンドで踏み台サーバーを削除してください。
+2. 作成時と同様に、set.tfとversions.tfを作成または配置します。  
+3. 以下コマンドで踏み台サーバーを削除してください。
+```
+terraform init  # S3バケットからtfstateを自動的に読み込みます
+terraform destroy
+```
+
+4. `terraform destroy`完了後、tfstate格納用S3バケットは自動では削除されません。  
+   S3にtfstateのオブジェクトが残っているため、`terraform destroy`ではバケットを削除できません。  
+   AWSマネージメントコンソールより対象のS3バケットを開き、オブジェクトを削除してからバケットを削除してください。
+
+### ローカルで管理している場合
+
+1. CloudShellを起動します。  
+2. ダウンロードしておいたtfstateとset.tfをCloudShellにアップロードします。    
+3. 以下コマンドで踏み台サーバーを削除してください。
 ```
 terraform init
 terraform destroy
