@@ -287,9 +287,8 @@ terraform destroy
 #### ローカルで管理している場合
 
 1. CloudShellを起動します。  
-2. ダウンロードしておいたtfstateとset.tfをCloudShellにアップロードします。  
-3. versions.tfを作成します（`backend "s3"`ブロックはコメントアウトしたままにしてください）。  
-4. 以下コマンドで踏み台サーバーを削除してください。
+2. ダウンロードしておいたtfstateとset.tfをCloudShellにアップロードします。    
+3. 以下コマンドで踏み台サーバーを削除してください。
 ```
 terraform init
 terraform destroy
