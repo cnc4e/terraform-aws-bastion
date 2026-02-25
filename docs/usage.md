@@ -69,7 +69,8 @@ terraform apply # リソースを作成していいかの確認があるので�
 
 初回実行時は以下の手順でS3バケットにtfstateをアップロードします。
 
-1. 以下のコマンドを実行し、`backend "s3"`ブロックを含む`versions.tf`を作成してください。
+1. 以下のコマンドを実行し、`backend "s3"`ブロックを含む`versions.tf`を作成してください。  
+`bucket`の値は`set.tf`の`tfstate_bucket_name`と一致させてください。デフォルト値から変更した場合は、以下の`terraform-aws-bastion-tfstate`を変更後のバケット名に書き換えてください。
 ```
 cat <<'EOF' > versions.tf
 terraform {
@@ -272,12 +273,16 @@ scp -i {秘密鍵ファイルのパス} {ユーザー名}@{インスタンスID}
 #### S3バックエンドで管理している場合
 
 1. CloudShellを起動します。  
-2. 作成時と同様に、set.tfとversions.tfを作成または配置します（`backend "s3"`ブロックのコメントアウトを解除してください）。  
+2. 作成時と同様に、set.tfとversions.tfを作成または配置します。  
 3. 以下コマンドで踏み台サーバーを削除してください。
 ```
 terraform init  # S3バケットからtfstateを自動的に読み込みます
 terraform destroy
 ```
+
+4. `terraform destroy`完了後、tfstate格納用S3バケットは自動では削除されません。  
+   S3にtfstateのオブジェクトが残っているため、`terraform destroy`ではバケットを削除できません。  
+   AWSマネージメントコンソールより対象のS3バケットを開き、オブジェクトを削除してからバケットを削除してください。
 
 #### ローカルで管理している場合
 
